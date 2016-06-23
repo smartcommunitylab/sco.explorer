@@ -1,8 +1,28 @@
-<ion-view view-title="Playlists">
+<ion-view view-title="{{'app' | translate}}" }>
+  <ion-nav-buttons side="secondary">
+    <button class="button button-icon icon ion-map" ng-click=""></button>
+  </ion-nav-buttons>
+
   <ion-content>
     <ion-list>
-      <ion-item ng-repeat="playlist in playlists" href="#/app/playlists/{{playlist.id}}">
-        {{playlist.title}}
+      <ion-item class="card item-icon-left" href="#/app/events/all">
+        <i class="icon ion-flag"></i> {{'events_cat_all' | translate}}
+      </ion-item>
+      <ion-item class="card item-icon-left" href="#/app/events/culture">
+        <i class="icon ion-university"></i>
+        {{'events_cat_culture' | translate}}
+      </ion-item>
+      <ion-item class="card item-icon-left" href="#/app/events/sport">
+        <i class="icon ion-ios-football"></i>
+        {{'events_cat_sport' | translate}}
+      </ion-item>
+      <ion-item class="card item-icon-left" href="#/app/events/social">
+        <i class="icon ion-ios-body"></i>
+        {{'events_cat_social' | translate}}
+      </ion-item>
+      <ion-item class="card item-icon-left" href="#/app/events/others">
+        <i class="icon ion-plus"></i>
+        {{'events_cat_others' | translate}}
       </ion-item>
     </ion-list>
   </ion-content>

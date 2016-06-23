@@ -1,1 +1,13 @@
-{}
+{
+  "app": "RoveretoExplorer",
+  "home": "Home",
+  "map": "Mappa",
+  "myevents": "I miei eventi",
+  "survey": "Questionario",
+  "credits": "Credits",
+  "events_cat_all": "Tutti gli eventi",
+  "events_cat_culture": "Cultura",
+  "events_cat_sport": "Sport",
+  "events_cat_social": "Social",
+  "events_cat_others": "Altri eventi"
+}
