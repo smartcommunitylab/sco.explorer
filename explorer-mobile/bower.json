@@ -1,25 +1,32 @@
 {
-    "name": "RoveretoExplorer",
-    "private": "true",
-    "dependencies": {
-        "ngCordova": "latest",
-        "angular-i18n": "latest",
-        "angular-translate": "latest",
-        "angular-translate-loader-static-files": "latest",
-        "moment": "latest"
-    },
-    "devDependencies": {
-        "ionic": "driftyco/ionic-bower#1.3.1"
-    },
-    "install": {
-        "path": "www/lib",
-        "sources": {
-            "ionic": "bower_components/ionic/**",
-            "ngCordova": "bower_components/ngCordova/dist/ng-cordova.min.js",
-            "angular-i18n": "bower_components/angular-i18n/angular-locale_it-it.js",
-            "angular-translate": "bower_components/angular-translate/angular-translate.min.js",
-            "angular-translate-loader-static-files": "bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js",
-            "moment": "bower_components/moment/min/moment-with-locales.min.js"
-        }
+  "name": "RoveretoExplorer",
+  "private": "true",
+  "dependencies": {
+    "ngCordova": "latest",
+    "angular-i18n": "latest",
+    "angular-translate": "latest",
+    "angular-translate-loader-static-files": "latest",
+    "moment": "latest",
+    "leaflet": "latest",
+    "angular-leaflet-directive": "latest"
+  },
+  "devDependencies": {
+    "ionic": "driftyco/ionic-bower#1.3.1"
+  },
+  "install": {
+    "path": "www/lib",
+    "sources": {
+      "ionic": "bower_components/ionic/**",
+      "ngCordova": "bower_components/ngCordova/dist/ng-cordova.min.js",
+      "angular-i18n": "bower_components/angular-i18n/angular-locale_it-it.js",
+      "angular-translate": "bower_components/angular-translate/angular-translate.min.js",
+      "angular-translate-loader-static-files": "bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js",
+      "moment": "bower_components/moment/min/moment-with-locales.min.js",
+      "leaflet": [
+        "bower_components/leaflet/dist/leaflet.css",
+        "bower_components/leaflet/dist/leaflet.js"
+      ],
+      "angular-leaflet-directive": "bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.min.js"
     }
+  }
 }
