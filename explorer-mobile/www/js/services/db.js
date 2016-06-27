@@ -1,6 +1,6 @@
 angular.module('explorer.services.db', [])
 
-.factory('DatiDB', function ($q, $http, $rootScope, $filter, $timeout, $window, Config, Profiling, GeoLocate, $ionicLoading, $ionicSlideBoxDelegate) {
+.factory('DatiDB', function ($q, $http, $rootScope, $filter, $timeout, $window, Config, Profiling, $ionicLoading, $ionicSlideBoxDelegate) {
   var SCHEMA_VERSION = Config.schemaVersion();
   var types = Config.contentTypesList();
 
@@ -25,11 +25,11 @@ angular.module('explorer.services.db', [])
   //console.log('currentDbVersion: ' + currentDbVersion);
   //console.log('lastSynced: ' + lastSynced);
 
-  var localSyncOptions = {
+  /*var localSyncOptions = {
     method: 'GET',
     url: 'data/data.json',
     remote: false
-  };
+  };*/
   var remoteSyncOptions = {
     method: 'POST',
     url: Config.syncUrl() + currentDbVersion,
@@ -192,13 +192,14 @@ angular.module('explorer.services.db', [])
               duration: Config.syncingOverlayTimeoutMillis()
             });
 
-            if (currentDbVersion == 0) {
+            /*if (currentDbVersion == 0) {
               currentSyncOptions = localSyncOptions;
-              //} else if (!currentSyncOptions || currentSyncOptions.remote) {
             } else {
               currentSyncOptions = remoteSyncOptions;
               currentSyncOptions.url = Config.syncUrl() + currentDbVersion;
-            }
+            }*/
+            currentSyncOptions = remoteSyncOptions;
+            currentSyncOptions.url = Config.syncUrl() + currentDbVersion;
             console.log('currentSyncOptions: ' + JSON.stringify(currentSyncOptions));
 
             $http.defaults.headers.common.Accept = 'application/json';
