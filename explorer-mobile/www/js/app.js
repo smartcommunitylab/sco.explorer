@@ -4,7 +4,7 @@ angular.module('explorer', [
     'ngSanitize',
     'pascalprecht.translate',
     'explorer.controllers.home',
-    /*'explorer.services.db',*/
+    'explorer.services.db',
     'explorer.services.conf'
 ])
 

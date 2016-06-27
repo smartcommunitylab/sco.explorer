@@ -73,12 +73,10 @@ angular.module('explorer.services.db', [])
         //}
         tx.executeSql('DROP TABLE IF EXISTS ContentObjects');
         console.log('contents table created')
-        tx.executeSql('CREATE TABLE IF NOT EXISTS ContentObjects (id text primary key, localid text, version integer, type text, categories text, data text)');
-        tx.executeSql('CREATE INDEX IF NOT EXISTS co_objid ON ContentObjects( localid )');
+        tx.executeSql('CREATE TABLE IF NOT EXISTS ContentObjects (id text primary key, version integer, type text, data text)');
         tx.executeSql('CREATE INDEX IF NOT EXISTS co_type ON ContentObjects( type )');
-        tx.executeSql('CREATE INDEX IF NOT EXISTS co_cate ON ContentObjects( categories )');
 
-        tx.executeSql('CREATE INDEX IF NOT EXISTS co_type_class ON ContentObjects( type, categories )');
+        tx.executeSql('CREATE INDEX IF NOT EXISTS co_type_class ON ContentObjects( type )');
       }, function (error) { //error callback
         console.log('cannot initialize db! ')
         console.log(error);
@@ -222,22 +220,8 @@ angular.module('explorer.services.db', [])
 
                     console.log('INSERTS[' + contentTypeKey + ']: ' + updates.length);
                     angular.forEach(updates, function (item, idx) {
-                      if (contentTypeKey == 'path') {
-                        // categoriesStr
-                        item['categoriesStr'] = JSON.stringify(item.categories);
-                        //                                                item['categoriesStr'] = categoriesTmp.substr(1, categoriesTmp.length - 2);
-                        //                                                item['categoriesStr'] = '';
-                        //                                                for (index = 0; index < item.categories.length; ++index) {
-                        //                                                    if (index > 0) {
-                        //                                                        item['categoriesStr'] = item['categoriesStr'] + ',\'' + item.categories[index] + '\''
-                        //                                                    } else {
-                        //                                                        item['categoriesStr'] = '\'' + item.categories + '\''
-                        //                                                    }
-                        //                                                }
 
-                      }
-
-                      values = [item.id ? item.id : item.localId, item.localId, item.version, contentTypeClassName, item.categoriesStr, JSON.stringify(item)];
+                      values = [item.id, item.version, contentTypeClassName, JSON.stringify(item)];
                       itemsToInsert.push(values)
                     });
 
@@ -253,7 +237,7 @@ angular.module('explorer.services.db', [])
                 dbObj.transaction(function (tx) {
                   angular.forEach(itemsToInsert, function (rowData, rowIdx) {
                     tx.executeSql('DELETE FROM ContentObjects WHERE id=?', [rowData[0]], function (tx, res) { //success callback
-                      tx.executeSql('INSERT INTO ContentObjects (id, localid, version, type, categories, data) VALUES (?, ?, ?, ?, ?, ?)',
+                      tx.executeSql('INSERT INTO ContentObjects (id, version, type, data) VALUES (?, ?, ?, ?)',
                         rowData,
                         function (tx, res) { //success callback
                           console.log('inserted obj (' + rowData[4] + ') with id: ' + rowData[0]);
@@ -360,7 +344,7 @@ angular.module('explorer.services.db', [])
                     var params = (cateId ? [types[dbname], cateId] : [types[dbname]]);
           */
           var sql = 'SELECT * ' +
-            'FROM ContentObjects c WHERE type= ? AND c.categories LIKE "%' + cateId + '%" ';
+            'FROM ContentObjects c WHERE type= ?';
           var params = [types['path']];
 
           //console.log('[DB.cate()] sql: '+sql);
@@ -463,7 +447,7 @@ angular.module('explorer.services.db', [])
 
         return dbitem.promise;
       });
-    },
+    }/*,
     getCategories: function () {
       console.log('DatiDB.getCategories()');
       return this.sync().then(function (dbVersion) {
@@ -512,6 +496,6 @@ angular.module('explorer.services.db', [])
 
         return dbitem.promise;
       });
-    }
+    }*/
   }
 })

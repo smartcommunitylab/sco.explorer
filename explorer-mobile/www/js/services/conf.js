@@ -7,13 +7,12 @@ angular.module('explorer.services.conf', [])
   var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';
   var app = 'roveretoexplorer'
   var userdata = 'userdata/paths';
-
+  var SCHEMA_VERSION = 3;
   var APP_BUILD = '';
 
   var credits = 'credits.html';
   var contentTypes = {
-    'path': 'it.smartcommunitylab.percorsi.model.Path',
-    'categories': 'it.smartcommunitylab.percorsi.model.Categories',
+    'path': 'eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject',
   };
   var dbName = 'Rovereto';
   return {
@@ -63,7 +62,7 @@ angular.module('explorer.services.conf', [])
       return service;
     },
     schemaVersion: function () {
-      return 0;
+      return SCHEMA_VERSION;
     },
     savedImagesDirName: function () {
       return 'Percorsi-ImagesCache';
@@ -95,6 +94,9 @@ angular.module('explorer.services.conf', [])
     },
     fileCleanupOverlayTimeoutMillis: function () {
       return 20 * 1000; /* seconds before automatically hiding cleaning overlay */
+    },
+    updateSchemaVersion: function (newVersion) {
+      SCHEMA_VERSION = newVersion;
     },
     contentTypesList: function () {
       return contentTypes;
