@@ -1,0 +1,14 @@
+{
+  "appname": "Rovereto Explorer",
+  "appversion": "2.0.0",
+  "serverURL": "https://dev.smartcommunitylab.it/roveretoexplorer",
+  "geocoderURL": "https://os.smartcommunitylab.it/core.geocoder/spring",
+  "AACURL": "https://tn.smartcommunitylab.it/aac",
+  "authServerURL": "/eauth/authorize",
+  "serverTokenURL": "/oauth/token",
+  "serverRegisterURL": "/internal/register/rest",
+  "serverProfileURL": "/basicprofile/me",
+  "cliendID": "ec03a596-e41e-49cc-808c-62f39e01de0b",
+  "clientSecKey": "6c6829bc-6621-4273-84b8-d74d23744f04",
+  "redirectURL": "http://localhost"
+}

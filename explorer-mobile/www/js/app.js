@@ -3,9 +3,14 @@ angular.module('explorer', [
     'ngCordova',
     'ngSanitize',
     'pascalprecht.translate',
-    'explorer.controllers.home'/*,
-    'explorer.services.db'*/
+    'explorer.controllers.home',
+    'explorer.services.config',
+    'explorer.services.utils'
 ])
+
+/*,
+'explorer.services.db'
+*/
 
 .run(function ($ionicPlatform) {
   $ionicPlatform.ready(function () {
