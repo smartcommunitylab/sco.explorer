@@ -6,6 +6,10 @@ angular.module('explorer', [
     'explorer.controllers.home',
     'explorer.services.config',
     'explorer.services.utils'
+    'explorer.services.db',
+    'explorer.services.conf',
+    'explorer.services.event',
+    'explorer.services.reviews'
 ])
 
 /*,
