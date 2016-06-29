@@ -2,7 +2,7 @@ angular.module('explorer.services.config', [])
 
 .factory('Config', function ($rootScope, $q, $http, $window) {
   var configService = {};
-  var configJson = {};
+  var configJson = null;
   var APP_BUILD = '';
 
   configService.init = function () {
@@ -20,8 +20,10 @@ angular.module('explorer.services.config', [])
     return deferred.promise;
   };
 
-  // INIT
-  configService.init();
+  /*
+   * INIT
+   */
+  //configService.init();
 
   configService.HTTP_CONFIG = {
     timeout: 5000
@@ -30,18 +32,51 @@ angular.module('explorer.services.config', [])
   configService.getServerURL = function () {
     return configJson['serverURL'];
   };
-  
-  configService.getSchemaVersion = function (){
-    return configJson['SCHEMA_VERSION'];
+
+  configService.getSchemaVersion = function () {
+    return configJson['schemaVersion'];
   }
-  
-  configService.getDbName = function (){
+
+  configService.getDbName = function () {
     return configJson['dbName'];
   }
-  
+
   configService.getSyncURL = function () {
-      return configService.getServerURL + '/sync' + '?since=';
-    },
+    return configService.getServerURL() + '/sync' + '?since=';
+  };
+
+  configService.getSyncTimeoutSeconds = function () {
+    // in seconds
+    return 60 * 60 * configJson['syncTimeout'];
+  };
+
+  configService.getSyncingOverlayTimeout = function () {
+    // in milliseconds
+    return 1000 * configJson['syncingOverlayTimeout'];
+  };
+
+  configService.getLoadingOverlayTimeout = function () {
+    // in milliseconds
+    return 1000 * configJson['loadingOverlayTimeout'];
+  };
+
+  configService.doProfiling = function () {
+    return configJson['doProfiling'];
+  };
+
+  configService.getContentTypes = function () {
+    return configJson['contentTypes'];
+  };
+
+  configService.getContentKeyFromDbType = function (dbtype) {
+    var cts = configService.getContentTypes();
+    for (var contentType in cts) {
+      if (cts.hasOwnProperty(contentType) && cts[contentType] == dbtype) {
+        return contentType;
+      }
+    }
+    return '';
+  };
 
   configService.getGeocoderURL = function () {
     return configJson['geocoderURL'];

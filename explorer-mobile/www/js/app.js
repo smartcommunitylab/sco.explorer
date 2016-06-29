@@ -7,8 +7,8 @@ angular.module('explorer', [
     'explorer.services.config',
     'explorer.services.utils',
     'explorer.services.db',
-    'explorer.services.event',
-    'explorer.services.conf'
+    'explorer.services.event'
+    //'explorer.services.conf'
     //'explorer.services.reviews'
 ])
 
