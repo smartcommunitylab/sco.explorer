@@ -14,38 +14,12 @@ angular.module('explorer.services.conf', [])
   var contentTypes = {
     'path': 'eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject',
   };
-  var dbName = 'Rovereto';
+//  var dbName = 'Rovereto';
   return {
 
-    getVersion: function () {
-      return 'v ' + APP_VERSION + (APP_BUILD && APP_BUILD != '' ? '<br/>(' + APP_BUILD + ')' : '');
-    },
-    getLang: function () {
-      var browserLanguage = '';
-      // works for earlier version of Android (2.3.x)
-      var androidLang;
-      if ($window.navigator && $window.navigator.userAgent && (androidLang = $window.navigator.userAgent.match(/android.*\W(\w\w)-(\w\w)\W/i))) {
-        browserLanguage = androidLang[1];
-      } else {
-        // works for iOS, Android 4.x and other devices
-        browserLanguage = $window.navigator.userLanguage || $window.navigator.language;
-      }
-      var lang = browserLanguage.substring(0, 2);
-      if (lang != 'it' && lang != 'en' && lang != 'de') lang = 'en';
-      return lang;
-    },
-    getLanguage: function () {
-
-      navigator.globalization.getLocaleName(
-        function (locale) {
-          alert('locale: ' + locale.value + '\n');
-        },
-        function () {
-          alert('Error getting locale\n');
-        }
-      );
-
-    },
+//    getVersion: function () {
+//      return 'v ' + APP_VERSION + (APP_BUILD && APP_BUILD != '' ? '<br/>(' + APP_BUILD + ')' : '');
+//    },
     keys: function () {
       return keys;
     },
@@ -66,13 +40,6 @@ angular.module('explorer.services.conf', [])
     },
     savedImagesDirName: function () {
       return 'Percorsi-ImagesCache';
-    },
-    syncUrl: function () {
-      //console.log('$rootScope.TEST_CONNECTION: '+(!!$rootScope.TEST_CONNECTION));
-      var SYNC_MODE = (!!$rootScope.TEST_CONNECTION ? 'syncdraft' : 'sync');
-      //console.log('SYNC_MODE: '+SYNC_MODE);
-      return URL + '/' + app + '/sync' + '?since=';
-      // /sync/{appId}?since={version}
     },
     syncTimeoutSeconds: function () {
       //return 60 * 60; /* 60 times 60 seconds = EVERY HOUR */

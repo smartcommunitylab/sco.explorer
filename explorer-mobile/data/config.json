@@ -10,5 +10,7 @@
   "serverProfileURL": "/basicprofile/me",
   "cliendID": "ec03a596-e41e-49cc-808c-62f39e01de0b",
   "clientSecKey": "6c6829bc-6621-4273-84b8-d74d23744f04",
-  "redirectURL": "http://localhost"
+  "redirectURL": "http://localhost",
+  "SCHEMA_VERSION": "3",
+  "dbName": "Rovereto"
 }

@@ -1,6 +1,6 @@
 angular.module('explorer.services.reviews', [])
 
-.factory('reviewsService', function ($http, $q, Config, eventService) {
+.factory('ReviewsSrv', function ($http, $q, Config, EventSrv) {
 
     var reviewsService = {};
 
@@ -9,7 +9,7 @@ angular.module('explorer.services.reviews', [])
 
         $http({
             method: 'GET',
-            url: Config.URL() + '/' + Config.app() + '/social/readReviews/' + id,
+            url: Config.serverURL() + '/social/readReviews/' + id,
             headers: {
                 'Accept': 'application/json'
             }
@@ -30,7 +30,7 @@ angular.module('explorer.services.reviews', [])
 
         $http({
             method: 'POST',
-            url: Config.URL() + '/' + Config.app() + '/social/review/' + eventService.getIdEvent(evento),evento,
+            url: Config.serverURL() + '/social/review/' + eventService.getIdEvent(evento),evento,
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ angular.module('explorer.services.reviews', [])
 
         $http({
             method: 'POST',
-            url: Config.URL() + '/' + Config.app() + '/social/attend/' + id + '/' + add,'',
+            url: Config.serverURL() + '/social/attend/' + id + '/' + add,'',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -74,7 +74,7 @@ angular.module('explorer.services.reviews', [])
 
         $http({
             method: 'POST',
-            url: Config.URL() + '/' + Config.app() + '/social/edit/' + id + '/' + add,'',
+            url: Config.serverURL() + '/social/edit/' + id + '/' + add,'',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'

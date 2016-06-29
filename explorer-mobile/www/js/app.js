@@ -5,11 +5,11 @@ angular.module('explorer', [
     'pascalprecht.translate',
     'explorer.controllers.home',
     'explorer.services.config',
-    'explorer.services.utils'
+    'explorer.services.utils',
     'explorer.services.db',
-    'explorer.services.conf',
     'explorer.services.event',
-    'explorer.services.reviews'
+    'explorer.services.conf'
+    //'explorer.services.reviews'
 ])
 
 /*,

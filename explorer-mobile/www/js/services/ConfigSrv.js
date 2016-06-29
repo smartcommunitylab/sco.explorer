@@ -30,6 +30,18 @@ angular.module('explorer.services.config', [])
   configService.getServerURL = function () {
     return configJson['serverURL'];
   };
+  
+  configService.getSchemaVersion = function (){
+    return configJson['SCHEMA_VERSION'];
+  }
+  
+  configService.getDbName = function (){
+    return configJson['dbName'];
+  }
+  
+  configService.getSyncURL = function () {
+      return configService.getServerURL + '/sync' + '?since=';
+    },
 
   configService.getGeocoderURL = function () {
     return configJson['geocoderURL'];

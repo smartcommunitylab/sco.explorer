@@ -1,7 +1,6 @@
 angular.module('explorer.services.db', [])
 
 .factory('DatiDB', function ($q, $http, $rootScope, $filter, $timeout, $window, Config, Profiling, $ionicLoading, $ionicSlideBoxDelegate) {
-  var SCHEMA_VERSION = Config.schemaVersion();
   var types = Config.contentTypesList();
 
   var parseDbRow = function (dbrow) {
@@ -18,7 +17,7 @@ angular.module('explorer.services.db', [])
 
   var currentDbVersion = 0,
     lastSynced = -1;
-  if (currentSchemaVersion == SCHEMA_VERSION) {
+  if (currentSchemaVersion == Config.getSchemaVersion()) {
     if (localStorage.currentDbVersion) currentDbVersion = Number(localStorage.currentDbVersion);
     if (localStorage.lastSynced) lastSynced = Number(localStorage.lastSynced);
   }
@@ -32,7 +31,7 @@ angular.module('explorer.services.db', [])
   };*/
   var remoteSyncOptions = {
     method: 'POST',
-    url: Config.syncUrl() + currentDbVersion,
+    url: Config.getSyncURL + currentDbVersion,
     data: '{"updated":{}}',
     remote: true
   };
@@ -41,7 +40,7 @@ angular.module('explorer.services.db', [])
   var dbObj;
 
   var dbopenDeferred = $q.defer();
-  var dbName = Config.dbName();
+  var dbName = Config.getDbName;
   if (ionic.Platform.isWebView()) {
     //console.log('cordova db...');
     document.addEventListener("deviceready", function () {
@@ -63,7 +62,7 @@ angular.module('explorer.services.db', [])
 
   var dbDeferred = $q.defer();
   dbopen.then(function (dbObj) {
-    if (currentSchemaVersion == 0 || currentSchemaVersion != SCHEMA_VERSION) {
+    if (currentSchemaVersion == 0 || currentSchemaVersion != Config.getSchemaVersion()) {
       console.log('initializing database...');
       dbObj.transaction(function (tx) {
         // if favs schema changes, we need to specify some special changes to perform to upgrade it
@@ -82,7 +81,7 @@ angular.module('explorer.services.db', [])
         console.log(error);
         dbDeferred.reject(error);
       }, function () { //success callback
-        currentSchemaVersion = SCHEMA_VERSION;
+        currentSchemaVersion = Config.getSchemaVersion();
         localStorage.currentSchemaVersion = currentSchemaVersion;
         localStorage.updatedVersion = true;
         if (currentDbVersion > 0) {
@@ -198,7 +197,7 @@ angular.module('explorer.services.db', [])
               currentSyncOptions.url = Config.syncUrl() + currentDbVersion;
             }*/
             currentSyncOptions = remoteSyncOptions;
-            currentSyncOptions.url = Config.syncUrl() + currentDbVersion;
+            currentSyncOptions.url = Config.getSyncURL + currentDbVersion;
             console.log('currentSyncOptions: ' + JSON.stringify(currentSyncOptions));
 
             $http.defaults.headers.common.Accept = 'application/json';
