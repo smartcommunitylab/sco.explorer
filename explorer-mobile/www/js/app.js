@@ -5,7 +5,9 @@ angular.module('explorer', [
     'pascalprecht.translate',
     'explorer.controllers.home',
     'explorer.services.db',
-    'explorer.services.conf'
+    'explorer.services.conf',
+    'explorer.services.event',
+    'explorer.services.reviews'
 ])
 
 .run(function ($ionicPlatform) {

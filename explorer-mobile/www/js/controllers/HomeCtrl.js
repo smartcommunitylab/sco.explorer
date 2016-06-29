@@ -6,8 +6,8 @@ angular.module('explorer.controllers.home', [])
   DatiDB.sync().then(function (data) {
     console.log(data);
     console.log("DB syncronization");
-  });
-
+  })// TODO error handling;
+  
 })
 
 .controller('HomeCtrl', function ($scope, $state, $ionicHistory, DatiDB) {
@@ -50,7 +50,7 @@ angular.module('explorer.controllers.home', [])
       console.log($scope.dBObject);
       $scope.getEventsbyCategory();
       localStorage.updatedVersion = "false";
-    });
+    })// TODO error handling;
   }
 
   if (!localStorage.currentDbVersion || localStorage.updatedVersion === "true") {
