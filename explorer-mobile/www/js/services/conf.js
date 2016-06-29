@@ -2,7 +2,7 @@ angular.module('explorer.services.conf', [])
 
 .factory('Config', function ($q, $http, $window, $filter, $rootScope) {
 
-  var DEVELOPMENT = false;
+  var DEVELOPMENT = true;
 
   var URL = 'https://' + (DEVELOPMENT ? 'dev' : 'tn') + '.smartcommunitylab.it';
   var app = 'roveretoexplorer'

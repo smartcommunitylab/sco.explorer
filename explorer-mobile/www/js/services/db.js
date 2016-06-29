@@ -84,6 +84,7 @@ angular.module('explorer.services.db', [])
       }, function () { //success callback
         currentSchemaVersion = SCHEMA_VERSION;
         localStorage.currentSchemaVersion = currentSchemaVersion;
+        localStorage.updatedVersion = true;
         if (currentDbVersion > 0) {
           currentDbVersion = 0;
           localStorage.currentDbVersion = currentDbVersion;
@@ -320,75 +321,10 @@ angular.module('explorer.services.db', [])
       });
       return syncronization.promise;
     },
-    getPathsByCategoryId: function (cateId) {
-      var data = $q.defer();
-      this.sync().then(function (dbVersion) {
-        Profiling.start('dbcate');
-        var loading = $ionicLoading.show({
-          template: $filter('translate')('loading'),
-          delay: 200,
-          duration: Config.loadingOverlayTimeoutMillis()
-        });
-
-        var lista = []
-        dbObj.transaction(function (tx) {
-          //console.log('[DB.cate()] dbname: '+dbname);
-          //console.log('[DB.cate()] cateId: ' + cateId);
-
-          /*
-                    var sql = 'SELECT c.id, c.type, c.classification, c.classification2, c.classification3, c.data, c.lat, c.lon, p.id AS parentid, p.type AS parenttype, p.data AS parent, count(s.id) as sonscount ' +
-          						'FROM ContentObjects c LEFT OUTER JOIN ContentObjects p ON p.id=c.parentid LEFT OUTER JOIN ContentObjects s ON s.parentid=c.id' +
-                      ' WHERE c.type=? ' +
-                      (_complex==undefined ? (cateId ? ' AND c.classification=?' : '') : ' AND c.classification' + (_complex?'=':'!=') + "'_complex'" ) +
-          						' GROUP BY c.id';
-                    var params = (cateId ? [types[dbname], cateId] : [types[dbname]]);
-          */
-          var sql = 'SELECT * ' +
-            'FROM ContentObjects c WHERE type= ?';
-          var params = [types['path']];
-
-          //console.log('[DB.cate()] sql: '+sql);
-          //console.log('[DB.cate()] params: '+params);
-
-          tx.executeSql(sql, params, function (tx2, cateResults) {
-            Profiling._do('dbcate', 'sql');
-            var len = cateResults.rows.length,
-              i;
-            for (i = 0; i < len; i++) {
-              var item = cateResults.rows.item(i);
-              //lista.push(parseDbRow(item));
-              lista.push(item);
-            }
-            Profiling._do('dbcate', 'lista');
-            //data.resolve(lista);
-          }, function (tx2, err) {
-            $ionicLoading.hide();
-            console.log('cate data error!');
-            console.log(err);
-            Profiling._do('dbcate');
-            data.reject(err);
-          });
-        }, function (error) { //error callback
-          $ionicLoading.hide();
-          console.log('db.cate() ERROR: ' + error);
-          Profiling._do('dbcate');
-          data.reject(error);
-        }, function () { //success callback
-          $ionicLoading.hide();
-          Profiling._do('dbcate', 'tx success');
-
-          for (i in lista) lista[i] = parseDbRow(lista[i]);
-          Profiling._do('dbcate', 'parse');
-
-          data.resolve(lista);
-        });
-      });
-      return data.promise;
-    },
-    getObjectsById: function (objId) {
-      console.log('DatiDB.getObjectsById("' + objId + '")');
+    getAllCategories: function () {
+      console.log('DatiDB.getCategories()');
       return this.sync().then(function (dbVersion) {
-        Profiling.start('dbgetobj');
+        Profiling.start('getCategories');
         var loading = $ionicLoading.show({
           template: $filter('translate')('loading'),
           delay: 600,
@@ -398,19 +334,9 @@ angular.module('explorer.services.db', [])
         var dbitem = $q.defer();
         var lista = [];
         dbObj.transaction(function (tx) {
-          //console.log('DatiDB.getObj(); objId: ' + objId);
-          if (objId.indexOf(',') == -1) {
-            idCond = 'c.localid LIKE ?';
-          } else {
-            qmarks = objId.split(',');
-            for (i = 0; i < qmarks.length; i++) qmarks[i] = '?';
-            idCond = 'c.localid IN (' + qmarks.join() + ')';
-          }
-          var qParams = objId.split(',');
-          qParams.unshift(types['path']);
+          var qParams = [types['path']];
           var dbQuery = 'SELECT * ' +
-            ' FROM ContentObjects c WHERE c.type LIKE ?' +
-            ' AND ' + idCond;
+            ' FROM ContentObjects c WHERE c.type=?';
           //console.log('dbQuery: ' + dbQuery);
           //console.log('qParams: ' + qParams);
           //console.log('DatiDB.getObj("' + dbname + '", "' + objId + '"); dbQuery launched...');
@@ -424,55 +350,6 @@ angular.module('explorer.services.db', [])
               }
               Profiling._do('dbgetobj', 'list');
               dbitem.resolve(lista);
-            } else {
-              console.log('not found!');
-              Profiling._do('dbgetobj', 'sql empty');
-              dbitem.reject('not found!');
-            }
-          }, function (tx2, err) {
-            $ionicLoading.hide();
-            console.log('error: ' + err);
-            Profiling._do('dbgetobj', 'sql error');
-            dbitem.reject(err);
-          });
-        }, function (error) { //error callback
-          $ionicLoading.hide();
-          console.log('db.getObj() ERROR: ' + error);
-          Profiling._do('dbgetobj', 'tx error');
-          dbitem.reject(error);
-        }, function () { //success callback
-          $ionicLoading.hide();
-          Profiling._do('dbgetobj', 'tx success');
-        });
-
-        return dbitem.promise;
-      });
-    }/*,
-    getCategories: function () {
-      console.log('DatiDB.getCategories()');
-      return this.sync().then(function (dbVersion) {
-        Profiling.start('getCategories');
-        var loading = $ionicLoading.show({
-          template: $filter('translate')('loading'),
-          delay: 600,
-          duration: Config.loadingOverlayTimeoutMillis()
-        });
-
-        var dbitem = $q.defer();
-        var lista = [];
-        dbObj.transaction(function (tx) {
-          var qParams = [types['categories']];
-          var dbQuery = 'SELECT * ' +
-            ' FROM ContentObjects c WHERE c.type=?';
-          //console.log('dbQuery: ' + dbQuery);
-          //console.log('qParams: ' + qParams);
-          //console.log('DatiDB.getObj("' + dbname + '", "' + objId + '"); dbQuery launched...');
-          tx.executeSql(dbQuery, qParams, function (tx2, results) {
-            //console.log('DatiDB.getObj("' + dbname + '", "' + objId + '"); dbQuery completed');
-            var resultslen = results.rows.length;
-            if (resultslen > 0) {
-              Profiling._do('getCategories', 'list');
-              dbitem.resolve(parseDbRow(results.rows.item(0)));
             } else {
               console.log('not found!');
               Profiling._do('getCategories', 'sql empty');
@@ -496,6 +373,6 @@ angular.module('explorer.services.db', [])
 
         return dbitem.promise;
       });
-    }*/
+    }
   }
 })
