@@ -1,29 +1,32 @@
 angular.module('explorer.services.config', [])
 
 .factory('Config', function ($rootScope, $q, $http, $window) {
-  var configService = {};
-  var configJson = null;
-  var APP_BUILD = '';
-
-  configService.init = function () {
-    var deferred = $q.defer();
-
-    if (configJson != null) {
-      deferred.resolve(true);
-    } else {
-      $http.get('data/config.json').success(function (response) {
-        configJson = response;
-        deferred.resolve(true);
-      });
-    }
-
-    return deferred.promise;
+  var configJson = {
+    "appname": "Rovereto Explorer",
+    "appversion": "2.0.0",
+    "serverURL": "https://dev.smartcommunitylab.it/roveretoexplorer",
+    "geocoderURL": "https://os.smartcommunitylab.it/core.geocoder/spring",
+    "AACURL": "https://tn.smartcommunitylab.it/aac",
+    "authServerURL": "/eauth/authorize",
+    "serverTokenURL": "/oauth/token",
+    "serverRegisterURL": "/internal/register/rest",
+    "serverProfileURL": "/basicprofile/me",
+    "cliendID": "ec03a596-e41e-49cc-808c-62f39e01de0b",
+    "clientSecKey": "6c6829bc-6621-4273-84b8-d74d23744f04",
+    "redirectURL": "http://localhost",
+    "schemaVersion": "3",
+    "dbName": "Rovereto",
+    "doProfiling": false,
+    "contentTypes": {
+      "path": "eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject"
+    },
+    "syncTimeout": 8,
+    "syncingOverlayTimeout": 50,
+    "loadingOverlayTimeout": 20
   };
 
-  /*
-   * INIT
-   */
-  //configService.init();
+  var configService = {};
+  var APP_BUILD = '';
 
   configService.HTTP_CONFIG = {
     timeout: 5000

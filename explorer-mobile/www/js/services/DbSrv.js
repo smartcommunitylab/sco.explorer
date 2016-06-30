@@ -25,122 +25,113 @@ angular.module('explorer.services.db', [])
   var syncinprogress = null;
   var db = null;
 
+  types = Config.getContentTypes();
+
+  if (currentSchemaVersion == Config.getSchemaVersion()) {
+    if (localStorage.currentDbVersion) {
+      currentDbVersion = Number(localStorage.currentDbVersion);
+    }
+
+    if (localStorage.lastSynced) {
+      lastSynced = Number(localStorage.lastSynced);
+    }
+  }
+  //console.log('currentDbVersion: ' + currentDbVersion);
+  //console.log('lastSynced: ' + lastSynced);
+
   /*
-   * INIT
-   */
-  dbService.init = function () {
-    var deferred = $q.defer();
-
-    types = Config.getContentTypes();
-
-    if (currentSchemaVersion == Config.getSchemaVersion()) {
-      if (localStorage.currentDbVersion) {
-        currentDbVersion = Number(localStorage.currentDbVersion);
-      }
-
-      if (localStorage.lastSynced) {
-        lastSynced = Number(localStorage.lastSynced);
-      }
-    }
-    //console.log('currentDbVersion: ' + currentDbVersion);
-    //console.log('lastSynced: ' + lastSynced);
-
-    /*
-    var localSyncOptions = {
-      method: 'GET',
-      url: 'data/data.json',
-      remote: false
-    };
-    */
-
-    remoteSyncOptions = {
-      method: 'POST',
-      url: Config.getSyncURL() + currentDbVersion,
-      data: '{"updated": {}}',
-      remote: true
-    };
-    console.log('remoteSyncOptions.url: ' + remoteSyncOptions.url);
-
-    var dbObj;
-    var dbopenDeferred = $q.defer();
-    var dbName = Config.getDbName;
-    if (ionic.Platform.isWebView()) {
-      //console.log('cordova db...');
-      document.addEventListener("deviceready", function () {
-        //console.log('cordova db inited...');
-        dbObj = window.sqlitePlugin.openDatabase({
-          name: dbName,
-          bgType: 1,
-          skipBackup: true
-        });
-        dbopenDeferred.resolve(dbObj);
-      }, false);
-    } else {
-      //console.log('web db...');
-      dbObj = window.openDatabase(dbName, '1.0', dbName + ' - Percorsi', 5 * 1024 * 1024);
-      //    remoteSyncOptions = localSyncOptions;
-      dbopenDeferred.resolve(dbObj);
-    }
-    var dbopen = dbopenDeferred.promise;
-
-    var dbDeferred = $q.defer();
-    dbopen.then(function (dbObj) {
-      if (currentSchemaVersion == 0 || currentSchemaVersion != Config.getSchemaVersion()) {
-        console.log('initializing database...');
-        dbObj.transaction(function (tx) {
-          // if favs schema changes, we need to specify some special changes to perform to upgrade it
-          //if (currentSchemaVersion==0) {
-          //tx.executeSql('DROP TABLE IF EXISTS Favorites');
-          //console.log('favorites table dropped')
-          //}
-          tx.executeSql('DROP TABLE IF EXISTS ContentObjects');
-          console.log('contents table created')
-          tx.executeSql('CREATE TABLE IF NOT EXISTS ContentObjects (id text primary key, version integer, type text, data text)');
-          tx.executeSql('CREATE INDEX IF NOT EXISTS co_type ON ContentObjects( type )');
-
-          tx.executeSql('CREATE INDEX IF NOT EXISTS co_type_class ON ContentObjects( type )');
-        }, function (error) { //error callback
-          console.log('cannot initialize db! ')
-          console.log(error);
-          dbDeferred.reject(error);
-        }, function () { //success callback
-          currentSchemaVersion = Config.getSchemaVersion();
-          localStorage.currentSchemaVersion = currentSchemaVersion;
-          localStorage.updatedVersion = true;
-          if (currentDbVersion > 0) {
-            currentDbVersion = 0;
-            localStorage.currentDbVersion = currentDbVersion;
-          }
-
-          console.log('db initialized');
-          dbDeferred.resolve(dbObj);
-        });
-      } else {
-        //console.log('no need to init database...');
-
-        /*
-        dbObj.transaction(function (tx) {
-          tx.executeSql("select * from sqlite_master where type='index'", [], function (tx, res) { //success callback
-            console.log('database schema following:');
-            for (i = 0; i < res.rows.length; i++) console.log(res.rows.item(i).sql);
-          }, function (e) { //error callback
-            console.log('unable dump table schema 1');
-          });
-        }, function (e) { //success callback
-          console.log('dump table schema ok');
-        }, function (e) { //error callback
-          console.log('unable dump table schema 2');
-        });
-        */
-
-        dbDeferred.resolve(dbObj);
-      }
-    });
-
-    db = dbDeferred.promise;
-
-    return deferred.promise;
+  var localSyncOptions = {
+    method: 'GET',
+    url: 'data/data.json',
+    remote: false
   };
+  */
+
+  remoteSyncOptions = {
+    method: 'POST',
+    url: Config.getSyncURL() + currentDbVersion,
+    data: '{"updated": {}}',
+    remote: true
+  };
+  console.log('remoteSyncOptions.url: ' + remoteSyncOptions.url);
+
+  var dbObj;
+  var dbopenDeferred = $q.defer();
+  var dbName = Config.getDbName;
+  if (ionic.Platform.isWebView()) {
+    //console.log('cordova db...');
+    document.addEventListener("deviceready", function () {
+      //console.log('cordova db inited...');
+      dbObj = window.sqlitePlugin.openDatabase({
+        name: dbName,
+        bgType: 1,
+        skipBackup: true
+      });
+      dbopenDeferred.resolve(dbObj);
+    }, false);
+  } else {
+    //console.log('web db...');
+    dbObj = window.openDatabase(dbName, '1.0', dbName + ' - Percorsi', 5 * 1024 * 1024);
+    //remoteSyncOptions = localSyncOptions;
+    dbopenDeferred.resolve(dbObj);
+  }
+  var dbopen = dbopenDeferred.promise;
+
+  var dbDeferred = $q.defer();
+  dbopen.then(function (dbObj) {
+    if (currentSchemaVersion == 0 || currentSchemaVersion != Config.getSchemaVersion()) {
+      console.log('initializing database...');
+      dbObj.transaction(function (tx) {
+        // If favs schema changes, we need to specify some special changes to perform to upgrade it
+        //if (currentSchemaVersion==0) {
+        //  tx.executeSql('DROP TABLE IF EXISTS Favorites');
+        //  console.log('favorites table dropped')
+        //}
+        tx.executeSql('DROP TABLE IF EXISTS ContentObjects');
+        console.log('contents table created')
+        tx.executeSql('CREATE TABLE IF NOT EXISTS ContentObjects (id text primary key, version integer, type text, data text)');
+        tx.executeSql('CREATE INDEX IF NOT EXISTS co_type ON ContentObjects( type )');
+
+        tx.executeSql('CREATE INDEX IF NOT EXISTS co_type_class ON ContentObjects( type )');
+      }, function (error) { //error callback
+        console.log('cannot initialize db! ')
+        console.log(error);
+        dbDeferred.reject(error);
+      }, function () { //success callback
+        currentSchemaVersion = Config.getSchemaVersion();
+        localStorage.currentSchemaVersion = currentSchemaVersion;
+        localStorage.updatedVersion = true;
+        if (currentDbVersion > 0) {
+          currentDbVersion = 0;
+          localStorage.currentDbVersion = currentDbVersion;
+        }
+
+        console.log('db initialized');
+        dbDeferred.resolve(dbObj);
+      });
+    } else {
+      //console.log('no need to init database...');
+
+      /*
+      dbObj.transaction(function (tx) {
+        tx.executeSql("select * from sqlite_master where type='index'", [], function (tx, res) { //success callback
+          console.log('database schema following:');
+          for (i = 0; i < res.rows.length; i++) console.log(res.rows.item(i).sql);
+        }, function (e) { //error callback
+          console.log('unable dump table schema 1');
+        });
+      }, function (e) { //success callback
+        console.log('dump table schema ok');
+      }, function (e) { //error callback
+        console.log('unable dump table schema 2');
+      });
+      */
+
+      dbDeferred.resolve(dbObj);
+    }
+  });
+
+  db = dbDeferred.promise;
 
   dbService.reset = function () {
     if (!ionic.Platform.isWebView() || navigator.connection.type != Connection.NONE) {
@@ -411,17 +402,8 @@ angular.module('explorer.services.db', [])
 .factory('Profiling', function ($q, Config) {
   var profilingService = {};
 
-  var reallyDoProfiling = false;
+  var reallyDoProfiling = Config.doProfiling();
   var startTimes = {};
-
-  /*
-   * INIT
-   */
-  profilingService.init = function () {
-    var deferred = $q.defer();
-    reallyDoProfiling = Config.doProfiling();
-    return deferred.promise;
-  };
 
   profilingService.start2 = function (label) {
     startTimes[label] = (new Date).getTime();

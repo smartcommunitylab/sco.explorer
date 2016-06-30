@@ -1,18 +1,12 @@
 angular.module('explorer.controllers.home', [])
 
 .controller('AppCtrl', function ($scope, $state, $ionicHistory, Config, Profiling, DbSrv) {
-
   /* Sync iniziale */
-  Config.init().then(function () {
-    Profiling.init().then(function () {
-      DbSrv.init().then(function () {
-        DbSrv.sync().then(function (data) {
-            console.log(data);
-            console.log('DB syncronization');
-          }) // TODO error handling;
-      });
-    });
+  DbSrv.sync().then(function (data) {
+    console.log(data);
+    console.log('DB syncronization');
   });
+  // TODO error handling;
 })
 
 .controller('HomeCtrl', function ($scope, $state, $ionicHistory, Config, Profiling, DbSrv) {
@@ -58,17 +52,11 @@ angular.module('explorer.controllers.home', [])
   }
 
   if (!localStorage.currentDbVersion || localStorage.updatedVersion === 'true') {
-    Config.init().then(function () {
-      Profiling.init().then(function () {
-        DbSrv.init().then(function () {
-          DbSrv.sync().then(function (data) {
-              console.log(data);
-              init();
-            }) // TODO error handling;
-        });
-      });
+    DbSrv.sync().then(function (data) {
+      console.log(data);
+      init();
     });
-
+    // TODO error handling;
   }
 
   /* Divide gli eventi per categoria */
