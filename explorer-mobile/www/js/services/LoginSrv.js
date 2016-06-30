@@ -1,6 +1,6 @@
 angular.module('explorer.services.login', [])
 
-.factory('loginService', function ($q, $http, $window, $rootScope, $ionicPlatform, Config, storageService) {
+.factory('LoginSrv', function ($q, $http, $window, $rootScope, $ionicPlatform, Config, storageService) {
   var loginService = {};
   var facebookToken = null;
   var googleToken = null;

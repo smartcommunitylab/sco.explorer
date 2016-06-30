@@ -4,9 +4,11 @@ angular.module('explorer', [
     'ngSanitize',
     'pascalprecht.translate',
     'explorer.controllers.home',
+    'explorer.controllers.login',
     'explorer.services.config',
     'explorer.services.utils',
     'explorer.services.db',
+    'explorer.services.login',
     'explorer.services.event'
     //'explorer.services.conf'
     //'explorer.services.reviews'
@@ -64,7 +66,18 @@ angular.module('explorer', [
         controller: 'HomeCtrl'
       }
     }
+  })
+
+  .state('app.login', {
+    url: '/login',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/login.html',
+        controller: 'LoginCtrl'
+      }
+    }
   });
+
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/home');
 });

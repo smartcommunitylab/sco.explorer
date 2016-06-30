@@ -1,6 +1,6 @@
 angular.module('explorer.controllers.login', [])
 
-.controller('LoginCtrl', function ($scope, $ionicSideMenuDelegate, $ionicLoading, $ionicPlatform, $state, $ionicHistory, $ionicPopup, $timeout, $filter, Utils, Config, loginService, userService, storageService, Toast) {
+.controller('LoginCtrl', function ($scope, $ionicSideMenuDelegate, $ionicLoading, $ionicPlatform, $state, $ionicHistory, $ionicPopup, $timeout, $filter, Utils, Config, LoginSrv, userService, storageService) {
   $ionicSideMenuDelegate.canDragContent(false);
 
   $scope.user = {
@@ -20,7 +20,7 @@ angular.module('explorer.controllers.login', [])
       $ionicLoading.hide();
     }, 3000);
 
-    loginService.login(null, 'google').then(function (profile) {
+    LoginSrv.login(null, 'google').then(function (profile) {
         $ionicLoading.hide();
         storageService.saveUser(profile);
 
@@ -32,7 +32,7 @@ angular.module('explorer.controllers.login', [])
         });
       },
       function (err) {
-        Toast.show($filter('translate')('pop_up_error_server_template'), "short", "bottom");
+        Toast.show($filter('translate')('pop_up_error_server_template'), 'short', 'bottom');
         $ionicLoading.hide();
       }
     );
@@ -101,7 +101,7 @@ angular.module('explorer.controllers.login', [])
       $ionicLoading.hide();
     }, 3000);
 
-    loginService.login(null, 'facebook').then(function (profile) {
+    LoginSrv.login(null, 'facebook').then(function (profile) {
       $ionicLoading.hide();
       storageService.saveUser(profile);
 
@@ -169,23 +169,21 @@ angular.module('explorer.controllers.login', [])
   });
 
   $ionicPlatform.ready(function () {
-    Config.init().then(function () {
-      if (window.cordova && window.cordova.plugins.screenorientation) {
-        screen.lockOrientation('portrait');
-      }
+    if (window.cordova && window.cordova.plugins.screenorientation) {
+      screen.lockOrientation('portrait');
+    }
 
-      /*
-      $scope.$on('$ionicView.enter', function () {
-          $ionicLoading.hide();
-      });
-      */
-
-      userService.getValidToken().then(function (validToken) {
-        var profile = storageService.getUser();
-        $scope.validateUserForGamification(profile);
-      }, function (err) {
+    /*
+    $scope.$on('$ionicView.enter', function () {
         $ionicLoading.hide();
-      })
+    });
+    */
+
+    userService.getValidToken().then(function (validToken) {
+      var profile = storageService.getUser();
+      $scope.validateUserForGamification(profile);
+    }, function (err) {
+      $ionicLoading.hide();
     });
   });
 
@@ -199,7 +197,7 @@ angular.module('explorer.controllers.login', [])
 
   $scope.signin = function () {
     Utils.loading();
-    loginService.signin($scope.user).then(
+    LoginSrv.signin($scope.user).then(
       function (profile) {
         $ionicLoading.hide();
         storageService.saveUser(profile);
@@ -221,7 +219,7 @@ angular.module('explorer.controllers.login', [])
   };
 })
 
-.controller('RegisterCtrl', function ($scope, $rootScope, $state, $filter, $ionicHistory, $ionicPopup, $translate, Utils, Config, loginService) {
+.controller('RegisterCtrl', function ($scope, $rootScope, $state, $filter, $ionicHistory, $ionicPopup, $translate, Utils, Config, LoginSrv) {
   $scope.user = {
     lang: $translate.preferredLanguage(),
     name: '',
@@ -261,7 +259,7 @@ angular.module('explorer.controllers.login', [])
     }
 
     Utils.loading();
-    loginService.register($scope.user).then(
+    LoginSrv.register($scope.user).then(
       function (data) {
         $state.go('app.signupsuccess');
       },
