@@ -2,15 +2,15 @@ angular.module('explorer.controllers.home', [])
 
 .controller('AppCtrl', function ($scope, $state, $ionicHistory, Config, Profiling, DbSrv) {
   /* Sync iniziale */
-  DbSrv.sync().then(function (data) {
-    console.log(data);
-    console.log('DB syncronization');
+  DbSrv.sync().then(function (reset) {
+    console.log('DB syncronization. Reset: ' + reset);
   });
   // TODO error handling;
 })
 
 .controller('HomeCtrl', function ($scope, $state, $ionicHistory, Config, Profiling, DbSrv) {
-  $scope.dBObject = null;
+  $scope.dbObject = null;
+
   $scope.eventsByCategory = {
     Sociale: [],
     Cultura: [],
@@ -40,39 +40,36 @@ angular.module('explorer.controllers.home', [])
   };
 
 
-  /* Eatabase Object creation */
-
+  /* Database Object creation */
   var init = function () {
     DbSrv.getAllCategories().then(function (data) {
-        $scope.dBObject = data;
-        console.log($scope.dBObject);
-        $scope.getEventsbyCategory();
-        localStorage.updatedVersion = 'false';
-      }) // TODO error handling;
+      if (!!data) {
+        $scope.dbObject = data;
+      }
+      //console.log($scope.dbObject);
+      $scope.getEventsbyCategory();
+    }); // TODO error handling;
   }
 
-  if (!localStorage.currentDbVersion || localStorage.updatedVersion === 'true') {
-    DbSrv.sync().then(function (data) {
-      console.log(data);
-      init();
-    });
-    // TODO error handling;
-  }
+  DbSrv.sync().then(function (reset) {
+    console.log('Reset: ' + reset);
+    init();
+  });
+  // TODO error handling;
 
   /* Divide gli eventi per categoria */
-
   $scope.getEventsbyCategory = function () {
-    for (var i in $scope.dBObject) {
-      for (var j = 0; j < $scope.dBObject[i].category.length; j++) {
-        /*eventsByCategory[$scope.dBObject[i].category[j]].push($scope.dBObject[i].title);*/
-        if ($scope.dBObject[i].category[j] == "Sociale") {
-          $scope.eventsByCategory.Sociale.push($scope.dBObject[i]);
-        } else if ($scope.dBObject[i].category[j] == "Cultura") {
-          $scope.eventsByCategory.Cultura.push($scope.dBObject[i]);
-        } else if ($scope.dBObject[i].category[j] == "Sport") {
-          $scope.eventsByCategory.Sport.push($scope.dBObject[i]);
+    for (var i in $scope.dbObject) {
+      for (var j = 0; j < $scope.dbObject[i].category.length; j++) {
+        /*eventsByCategory[$scope.dbObject[i].category[j]].push($scope.dbObject[i].title);*/
+        if ($scope.dbObject[i].category[j] == "Sociale") {
+          $scope.eventsByCategory.Sociale.push($scope.dbObject[i]);
+        } else if ($scope.dbObject[i].category[j] == "Cultura") {
+          $scope.eventsByCategory.Cultura.push($scope.dbObject[i]);
+        } else if ($scope.dbObject[i].category[j] == "Sport") {
+          $scope.eventsByCategory.Sport.push($scope.dbObject[i]);
         } else {
-          $scope.eventsByCategory.Other.push($scope.dBObject[i]);
+          $scope.eventsByCategory.Other.push($scope.dbObject[i]);
         }
       }
     }
