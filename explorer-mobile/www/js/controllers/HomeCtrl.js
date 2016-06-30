@@ -11,13 +11,6 @@ angular.module('explorer.controllers.home', [])
 .controller('HomeCtrl', function ($scope, $state, $ionicHistory, Config, Profiling, DbSrv) {
   $scope.dbObject = null;
 
-  $scope.eventsByCategory = {
-    Sociale: [],
-    Cultura: [],
-    Sport: [],
-    Other: []
-  };
-
   // alternative to <a href>
   $scope.goTo = function (state, params, reload, root) {
     if (!!root) {
@@ -46,8 +39,6 @@ angular.module('explorer.controllers.home', [])
       if (!!data) {
         $scope.dbObject = data;
       }
-      //console.log($scope.dbObject);
-      $scope.getEventsbyCategory();
     }); // TODO error handling;
   }
 
@@ -57,22 +48,17 @@ angular.module('explorer.controllers.home', [])
   });
   // TODO error handling;
 
-  /* Divide gli eventi per categoria */
-  $scope.getEventsbyCategory = function () {
-    for (var i in $scope.dbObject) {
-      for (var j = 0; j < $scope.dbObject[i].category.length; j++) {
-        /*eventsByCategory[$scope.dbObject[i].category[j]].push($scope.dbObject[i].title);*/
-        if ($scope.dbObject[i].category[j] == "Sociale") {
-          $scope.eventsByCategory.Sociale.push($scope.dbObject[i]);
-        } else if ($scope.dbObject[i].category[j] == "Cultura") {
-          $scope.eventsByCategory.Cultura.push($scope.dbObject[i]);
-        } else if ($scope.dbObject[i].category[j] == "Sport") {
-          $scope.eventsByCategory.Sport.push($scope.dbObject[i]);
-        } else {
-          $scope.eventsByCategory.Other.push($scope.dbObject[i]);
-        }
-      }
-    }
-    console.log($scope.eventsByCategory);
+
+  /* Get element by id */
+
+  $scope.getElementbyId = function (id) {
+    return $scope.dbObject["All"][id];
   };
+
+  /* Get elements by category */
+
+  $scope.getElementsbyCategory = function (category) {
+    return $scope.dbObject[category];
+  };
+
 });

@@ -355,7 +355,13 @@ angular.module('explorer.services.db', [])
       var dbitem = $q.defer();
 
       if (!dbObject || !!reset) {
-        var lista = [];
+        var lista = {
+          Sociale: {},
+          Cultura: {},
+          Sport: {},
+          Other: {},
+          All: {}
+        };
         dbObj.transaction(function (tx) {
           var qParams = [types['path']];
           var dbQuery = 'SELECT * ' +
@@ -367,9 +373,20 @@ angular.module('explorer.services.db', [])
             //console.log('DbSrv.getObj("' + dbname + '", "' + objId + '"); dbQuery completed');
             var resultslen = results.rows.length;
             if (resultslen > 0) {
-              for (var i = 0; i < resultslen; i++) {
-                var item = results.rows.item(i);
-                lista.push(parseDbRow(item));
+              for (var i in results.rows) {
+                var item = parseDbRow(results.rows.item(i));
+                lista.All[item.id] = item;
+                for (var j = 0; j < item.category.length; j++) {
+                  if (item.category[j] == "Sociale") {
+                    lista.Sociale[item.id] = item;
+                  } else if (item.category[j] == "Cultura") {
+                    lista.Cultura[item.id] = item;
+                  } else if (item.category[j] == "Sport") {
+                    lista.Sport[item.id] = item;
+                  } else {
+                    lista.Other[item.id] = item;
+                  }
+                }
               }
               Profiling._do('dbgetobj', 'list');
               dbObject = lista;
