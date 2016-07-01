@@ -1,0 +1,40 @@
+<ion-view hide-nav-bar="true">
+  <ion-nav-buttons side="left">
+
+  </ion-nav-buttons>
+
+  <ion-content>
+    <h1>{{'login' | translate}}</h1>
+    <h4>{{'signin' | translate}}</h4>
+    <label class="item item-input">
+      <input type="email" placeholder="{{'email' | translate}}" ng-model="user.email">
+    </label>
+    <label class="item item-input">
+      <input type="password" placeholder="{{'password' | translate}}" ng-model="user.password">
+    </label>
+    <a ng-click="passwordRecover()">
+      {{'reset_password' | translate}}
+    </a>
+
+    <button class="button button-block" ng-click="signin()">
+      {{'signin' | translate}}
+    </button>
+    <a ng-click="goRegister()">
+      {{'signup' | translate}}
+    </a>
+    <br/>
+    <span>{{'login_with' | translate}}</span>
+    <div class="row">
+      <div class="col">
+        <button class="button button-block" ng-click="facebookSignIn()">
+          {{'facebook' | translate}}
+        </button>
+      </div>
+      <div class="col">
+        <button class="button button-block" ng-click="googleSignIn()">
+          {{'google' | translate}}
+        </button>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

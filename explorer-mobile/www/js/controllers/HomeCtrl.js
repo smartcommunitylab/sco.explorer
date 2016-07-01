@@ -8,7 +8,7 @@ angular.module('explorer.controllers.home', [])
   // TODO error handling;
 })
 
-.controller('HomeCtrl', function ($scope, $state, $ionicHistory, Config, Profiling, DbSrv) {
+.controller('HomeCtrl', function ($scope, $state, $ionicHistory, Config, Profiling, DbSrv, LoginSrv) {
   $scope.dbObject = null;
   var now = moment().format("YYYY-MM-DD");
   console.log(now);
@@ -38,7 +38,6 @@ angular.module('explorer.controllers.home', [])
     window.open(link, '_system');
   };
 
-
   /* Database Object creation */
   var init = function () {
     DbSrv.getAllCategories().then(function (data) {
@@ -48,21 +47,12 @@ angular.module('explorer.controllers.home', [])
     }); // TODO error handling;
   }
 
-  DbSrv.sync().then(function (reset) {
-    console.log('Reset: ' + reset);
-    init();
-  });
-  // TODO error handling;
-
-
-  /* Get element by id */
-
+  /* Get element by Id */
   $scope.getElementbyId = function (id) {
-    return $scope.dbObject["All"][id];
+    return $scope.dbObject['All'][id];
   };
 
   /* Get elements by category */
-
   $scope.getElementsbyCategory = function (category) {
     return $scope.dbObject[category];
   };
@@ -110,5 +100,4 @@ angular.module('explorer.controllers.home', [])
       }
     }
   };
-
 });
