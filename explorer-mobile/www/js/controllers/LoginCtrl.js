@@ -215,7 +215,7 @@ angular.module('explorer.controllers.login', [])
           template: $filter('translate')('error_signin')
         });
       }
-    ).finally(Utils.loaded);
+    ).finally(Utils.loaded());
   };
 })
 
@@ -273,6 +273,6 @@ angular.module('explorer.controllers.login', [])
           template: $filter('translate')(errorMsg)
         });
       }
-    ).finally(Utils.loaded);
+    ).finally(Utils.loaded());
   };
 });

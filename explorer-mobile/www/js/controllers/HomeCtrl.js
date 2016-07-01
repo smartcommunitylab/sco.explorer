@@ -32,14 +32,13 @@ angular.module('explorer.controllers.home', [])
     window.open(link, '_system');
   };
 
-  /* Database Object creation */
-  var init = function () {
-    DbSrv.getAllCategories().then(function (data) {
-      if (!!data) {
-        $scope.dbObject = data;
-      }
-    }); // TODO error handling;
-  }
+  /* dbObject creation */
+  DbSrv.getAllCategories().then(function (data) {
+    if (!!data) {
+      $scope.dbObject = data;
+    }
+  }); // TODO error handling;
+
 
   /* Get element by Id */
   $scope.getElementbyId = function (id) {
@@ -51,4 +50,3 @@ angular.module('explorer.controllers.home', [])
     return $scope.dbObject[category];
   };
 });
-
