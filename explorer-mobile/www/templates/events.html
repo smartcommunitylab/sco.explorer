@@ -1,0 +1,18 @@
+<ion-view view-title="{{'events' | translate}}" }>
+  <ion-nav-buttons side="secondary">
+    <button class="button button-icon icon ion-android-funnel" ng-click=""></button>
+    <button class="button button-icon icon ion-search" ng-click=""></button>
+  </ion-nav-buttons>
+
+  <ion-content>
+    <ion-list ng-if="!!events">
+      <div class="card">
+        <ion-item class="item item-thumbnail-left" ng-repeat="event in events">
+          <img src="https://placehold.it/150x150" />
+          <h2>{{event.title}}</h2>
+          <p>{{event}}</p>
+        </ion-item>
+      </div>
+    </ion-list>
+  </ion-content>
+</ion-view>

@@ -1,6 +1,10 @@
 angular.module('explorer.controllers.home', [])
 
 .controller('AppCtrl', function ($scope, $state, $ionicHistory, Config, Profiling, DbSrv) {
+  $scope.goTo = function (state) {
+    $state.go(state);
+  };
+
   /* Sync iniziale */
   DbSrv.sync().then(function (reset) {
     console.log('DB syncronization. Reset: ' + reset);

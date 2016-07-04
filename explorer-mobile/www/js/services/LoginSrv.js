@@ -29,6 +29,7 @@ angular.module('explorer.services.login', [])
 
       var processURL = function (url, deferred, w) {
         var success = /http:\/\/localhost(\/)?\?code=(.+)$/.exec(url);
+        //var success = /\?code=(.+)$/.exec(url);
         var error = /\?error=(.+)$/.exec(url);
         if (w && (success || error)) {
           // Always close the browser when match is found
@@ -304,7 +305,7 @@ angular.module('explorer.services.login', [])
     );
 
     return deferred.promise;
-  }
+  };
 
   loginService.register = function (user) {
     var deferred = $q.defer();

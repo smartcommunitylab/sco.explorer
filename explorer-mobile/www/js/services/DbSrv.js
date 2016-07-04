@@ -4,6 +4,7 @@ angular.module('explorer.services.db', [])
   var dbService = {};
 
   var dbObject = null;
+  var categories = ['Cultura', 'Sociale', 'Sport', 'Other'];
 
   var types = null;
 
@@ -355,41 +356,38 @@ angular.module('explorer.services.db', [])
       var dbitem = $q.defer();
 
       if (!dbObject || !!reset) {
-        var lista = {
-          Sociale: {},
-          Cultura: {},
-          Sport: {},
-          Other: {},
-          All: {}
+        var catEvents = {
+          'All': {}
         };
+        angular.forEach(categories, function (cat) {
+          catEvents[cat] = {};
+        });
         dbObj.transaction(function (tx) {
           var qParams = [types['path']];
-          var dbQuery = 'SELECT * ' +
-            ' FROM ContentObjects c WHERE c.type=?';
+          var dbQuery = 'SELECT * ' + ' FROM ContentObjects c WHERE c.type=?';
           //console.log('dbQuery: ' + dbQuery);
           //console.log('qParams: ' + qParams);
           //console.log('DbSrv.getObj("' + dbname + '", "' + objId + '"); dbQuery launched...');
           tx.executeSql(dbQuery, qParams, function (tx2, results) {
             //console.log('DbSrv.getObj("' + dbname + '", "' + objId + '"); dbQuery completed');
-            var resultslen = results.rows.length;
-            if (resultslen > 0) {
+            if (results.rows.length > 0) {
               for (var i in results.rows) {
                 var item = parseDbRow(results.rows.item(i));
-                lista.All[item.id] = item;
+                catEvents['All'][item.id] = item;
                 for (var j = 0; j < item.category.length; j++) {
-                  if (item.category[j] == "Sociale") {
-                    lista.Sociale[item.id] = item;
-                  } else if (item.category[j] == "Cultura") {
-                    lista.Cultura[item.id] = item;
-                  } else if (item.category[j] == "Sport") {
-                    lista.Sport[item.id] = item;
+                  if (item.category[j] == 'Cultura') {
+                    catEvents['Cultura'][item.id] = item;
+                  } else if (item.category[j] == 'Sociale') {
+                    catEvents['Sociale'][item.id] = item;
+                  } else if (item.category[j] == 'Sport') {
+                    catEvents['Sport'][item.id] = item;
                   } else {
-                    lista.Other[item.id] = item;
+                    catEvents['Other'][item.id] = item;
                   }
                 }
               }
               Profiling._do('dbgetobj', 'list');
-              dbObject = lista;
+              dbObject = catEvents;
               dbitem.resolve(dbObject);
             } else {
               console.log('not found!');
@@ -423,6 +421,10 @@ angular.module('explorer.services.db', [])
 
   dbService.getDbObject = function () {
     return dbObject;
+  };
+
+  dbService.getCategories = function () {
+    return categories;
   };
 
   return dbService;

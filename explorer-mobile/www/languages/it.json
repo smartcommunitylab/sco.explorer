@@ -2,8 +2,9 @@
   "app": "RoveretoExplorer",
   "home": "Home",
   "map": "Mappa",
+  "events": "Eventi",
+  "demonstrations": "Manifestazioni",
   "myevents": "I miei eventi",
-  "survey": "Questionario",
   "credits": "Credits",
   "email": "Email",
   "password": "password",
@@ -18,5 +19,7 @@
   "events_cat_culture": "Cultura",
   "events_cat_sport": "Sport",
   "events_cat_social": "Social",
-  "events_cat_others": "Altri eventi"
+  "events_cat_others": "Altri eventi",
+  "today": "Oggi",
+  "tomorrow": "Domani"
 }

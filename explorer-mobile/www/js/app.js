@@ -5,12 +5,11 @@ angular.module('explorer', [
     'pascalprecht.translate',
     'explorer.controllers.home',
     'explorer.controllers.login',
+    'explorer.controllers.events',
     'explorer.services.config',
     'explorer.services.utils',
     'explorer.services.db',
-    'explorer.services.login',
-    'explorer.services.event'
-    //'explorer.services.conf'
+    'explorer.services.login'
     //'explorer.services.reviews'
 ])
 
@@ -64,6 +63,16 @@ angular.module('explorer', [
       'menuContent': {
         templateUrl: 'templates/home.html',
         controller: 'HomeCtrl'
+      }
+    }
+  })
+
+  .state('app.events', {
+    url: '/events',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/events.html',
+        controller: 'EventsCtrl'
       }
     }
   })
