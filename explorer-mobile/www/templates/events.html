@@ -1,18 +1,36 @@
-<ion-view view-title="{{'events' | translate}}" }>
+<ion-view view-title="{{'events' | translate}}" class="events">
   <ion-nav-buttons side="secondary">
     <button class="button button-icon icon ion-android-funnel" ng-click=""></button>
     <button class="button button-icon icon ion-search" ng-click=""></button>
   </ion-nav-buttons>
 
   <ion-content>
-    <ion-list ng-if="!!events">
-      <div class="card">
-        <ion-item class="item item-thumbnail-left" ng-repeat="event in events">
-          <img src="https://placehold.it/150x150" />
-          <h2>{{event.title}}</h2>
-          <p>{{event}}</p>
-        </ion-item>
+    <div class="filter item-accordion">
+      <ion-item class="item-accordion-header item-icon-right" ng-click="filter.toggle()">
+        <div>{{!!filter.selected ? filter.selected : ('lbl_all_categories' | translate)}}</div>
+        <i class="icon ion-arrow-down-b" ng-class="{'open': filter.open}"></i>
+      </ion-item>
+      <div class="item-accordion-content" ng-show="filter.open">
+        <ion-list>
+          <ion-item ng-repeat="option in filter.options" ng-click="filter.filterBy(option)">
+            {{'cat_' + option | translate}}
+          </ion-item>
+          <ion-item class="reset" ng-click="filter.filterBy(null)">
+            {{'lbl_all_categories' | translate}}
+          </ion-item>
+        </ion-list>
       </div>
+    </div>
+    <ion-list ng-if="!!events" class="events-list">
+      <ion-item class="item item-thumbnail-left" ng-repeat="event in events">
+        <img src="https://placehold.it/150x150" />
+        <div>
+          <h4 class="event-categories">
+            <span ng-repeat="cat in event.category">{{cat}}</span>
+          </h4>
+          <h3 class="event-title">{{event.title}}</h3>
+        </div>
+      </ion-item>
     </ion-list>
   </ion-content>
 </ion-view>

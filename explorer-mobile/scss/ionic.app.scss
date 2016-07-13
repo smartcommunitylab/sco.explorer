@@ -15,9 +15,128 @@ $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
 
+// Ionic overrides
+$positive: #0a97a6 !default;
+$calm: #1eb8d1 !default;
+$balanced: #b6dfe9 !default;
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
-
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
+/*
+ * CUSTOM STYLES
+ */
+
+.menu {
+  background-color: $calm;
+}
+.menu .list .item {
+  border-color: transparent;
+  color: white;
+}
+.menu .list .item,
+.menu .list .item-complex .item-content {
+  background-color: transparent;
+}
+
+/*
+ * Events
+ */
+
+
+/* Filter */
+
+.item-accordion {
+  height: 44px;
+}
+.item-accordion .item-accordion-header,
+.item-accordion .item-accordion-content,
+.item-accordion .item-accordion-content p {
+  white-space: normal;
+}
+.item-accordion .item-accordion-header {
+  padding-top: 0;
+  padding-bottom: 0;
+  height: 44px;
+  line-height: 44px;
+}
+.item-accordion .item-accordion-header i {
+  transition: all 0.2s linear;
+}
+.item-accordion .item-accordion-header i.open {
+  transform: rotate(-180deg);
+}
+.item-accordion .item-accordion-header i::before {
+  font-size: 0.5em;
+}
+.item-accordion .item-accordion-content {
+  border-top: 0;
+  transition: all 0.2s linear;
+}
+.item-accordion .item-accordion-content.ng-hide {
+  line-height: 0px;
+  opacity: 0;
+}
+.filter {
+  /*z-index: 100;*/
+  /*position: fixed;*/
+  /*top: 0;*/
+  width: 100%;
+  height: auto;
+  background: $calm;
+}
+.filter.item-accordion .item {
+  background-color: $calm;
+  border: none;
+  color: #fff;
+  padding: 8px;
+}
+.filter.item-accordion .item.reset {
+  color: $balanced;
+}
+.filter.item-accordion .item-accordion-header {
+  padding: 0 8px;
+}
+.filter.item-accordion .item-accordion-header,
+.filter.item-accordion .item-accordion-content {
+  background: $calm;
+}
+.filter.item-accordion .item-accordion-content {
+  box-shadow: 0 4px 4px #A0A0A0;
+  padding: 0 8px;
+  text-align: center;
+}
+.filter.item-accordion .item-divider {
+  font-style: italic;
+}
+.filter.item-accordion .list {
+  margin-bottom: 0;
+}
+.filter.item-accordion .list-mycommunities .list {
+  border-bottom: 2px solid #fff;
+}
+.filter.item-accordion .list-mycommunities .list .item {
+  font-weight: bold;
+}
+.filter.item-accordion .list-mycommunities .list .item.item-divider {
+  font-weight: normal;
+}
+
+/* Events list */
+
+.events .events-list .list .item {
+  margin: 10px;
+  border-radius: 10px;
+  border-color: #bbbbbb;
+}
+.events .events-list .list .item img {
+  border-radius: 50%;
+}
+.events .events-list .list .item .event-title,
+.events .events-list .list .item .event-categories {
+  white-space: normal;
+}
+.events .events-list .list .item .event-categories span:not(:first-child) {
+  margin-left: 4px;
+}
